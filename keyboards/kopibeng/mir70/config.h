@@ -1,4 +1,4 @@
-/* Copyright 2021 Samuel Lu
+/* Copyright 2023 Samuel Lu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,8 @@
  *                  ROW2COL = ROW = Anode (+), COL = Cathode (-, marked on diode)
  *
 */
-#define MATRIX_ROW_PINS { B3, B2, F5, F1, F0 }
-#define MATRIX_COL_PINS { B1, B7, F4, F6, F7, C7, C6, B6, B5, B4, D7, D6, D4, D5, D3, D2 }
+#define MATRIX_ROW_PINS { A15, B3, C13, C14, C15 }
+#define MATRIX_COL_PINS { B0, A7, A6, A5, A4, A3, A2, A1, A0, B13, B15, B9, B7, B6, B5, B4}
 
 /* COL2ROW, ROW2COL*/
 #define DIODE_DIRECTION COL2ROW
@@ -49,27 +49,22 @@
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
 
-#ifdef RGB_MATRIX_ENABLE
-//rgb matrix setting
-// This is a 7-bit address, that gets left-shifted and bit 0
-// set to 0 for write, 1 for read (as per I2C protocol)
-// The address will vary depending on your wiring:
-// 0b1110100 AD <-> GND
-// 0b1110111 AD <-> VCC
-// 0b1110101 AD <-> SCL
-// 0b1110110 AD <-> SDA
-#define DRIVER_ADDR_1 0b0110000
-#define DRIVER_COUNT 1
-#define DRIVER_LED_TOTAL 73
+#define RGB_DI_PIN B1
+#define DRIVER_LED_TOTAL 72
 
-#define RGB_MATRIX_KEYPRESSES // reacts to keypresses
-#define RGB_MATRIX_KEYRELEASES // reacts to keyreleases (instead of keypresses)
+#define WS2812_PWM_COMPLEMENTARY_OUTPUT
+#define WS2812_PWM_DRIVER PWMD1
+#define WS2812_PWM_CHANNEL 3
+#define WS2812_PWM_PAL_MODE 1
+#define WS2812_DMA_STREAM STM32_DMA2_STREAM5
+#define WS2812_DMA_CHANNEL 6
+
+#define RGB_MATRIX_STARTUP_VAL 60
+#define RGB_MATRIX_MAXIMUM_BRIGHTNESS 120
+#define RGB_DISABLE_WHEN_USB_SUSPENDED
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
-#define RGB_DISABLE_AFTER_TIMEOUT 0 // number of ticks to wait until disabling effects
-#define RGB_MATRIX_LED_FLUSH_LIMIT 16 // limits in milliseconds how frequently an animation will update the LEDs. 16 (16ms) is equivalent to limiting to 60fps (increases keyboard responsiveness)
-#define RGB_MATRIX_MAXIMUM_BRIGHTNESS 255 // limits maximum brightness of LEDs to 200 out of 255. If not defined maximum brightness is set to 255
-#define RGB_DISABLE_WHEN_USB_SUSPENDED // turn off effects when suspended
-#define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_CYCLE_PINWHEEL // Sets the default mode, if none has been set
+#define RGB_MATRIX_KEYPRESSES
+#define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_CYCLE_LEFT_RIGHT
 
 #define ENABLE_RGB_MATRIX_ALPHAS_MODS
 #define ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN
@@ -89,19 +84,20 @@
 #define ENABLE_RGB_MATRIX_CYCLE_OUT_IN_DUAL
 #define ENABLE_RGB_MATRIX_CYCLE_PINWHEEL
 #define ENABLE_RGB_MATRIX_CYCLE_SPIRAL
-// #define ENABLE_RGB_MATRIX_DUAL_BEACON
-// #define ENABLE_RGB_MATRIX_RAINBOW_BEACON
-// #define ENABLE_RGB_MATRIX_RAINBOW_PINWHEELS
-// #define ENABLE_RGB_MATRIX_RAINDROPS
-// #define ENABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
-// #define ENABLE_RGB_MATRIX_HUE_BREATHING
-// #define ENABLE_RGB_MATRIX_HUE_PENDULUM
-// #define ENABLE_RGB_MATRIX_HUE_WAVE
-// #define ENABLE_RGB_MATRIX_PIXEL_FRACTAL
-// #define ENABLE_RGB_MATRIX_PIXEL_RAIN
+#define ENABLE_RGB_MATRIX_DUAL_BEACON
+#define ENABLE_RGB_MATRIX_RAINBOW_BEACON
+#define ENABLE_RGB_MATRIX_RAINBOW_PINWHEELS
+#define ENABLE_RGB_MATRIX_RAINDROPS
+#define ENABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
+#define ENABLE_RGB_MATRIX_HUE_BREATHING
+#define ENABLE_RGB_MATRIX_HUE_PENDULUM
+#define ENABLE_RGB_MATRIX_HUE_WAVE
+#define ENABLE_RGB_MATRIX_PIXEL_RAIN
+#define ENABLE_RGB_MATRIX_PIXEL_FLOW
+//#define ENABLE_RGB_MATRIX_FRACTAL
 
-#define ENABLE_RGB_MATRIX_TYPING_HEATMAP
-#define ENABLE_RGB_MATRIX_DIGITAL_RAIN
+//#define ENABLE_RGB_MATRIX_TYPING_HEATMAP
+//#define ENABLE_RGB_MATRIX_DIGITAL_RAIN
 
 #define ENABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 #define ENABLE_RGB_MATRIX_SOLID_REACTIVE
@@ -115,7 +111,3 @@
 #define ENABLE_RGB_MATRIX_MULTISPLASH
 #define ENABLE_RGB_MATRIX_SOLID_SPLASH
 #define ENABLE_RGB_MATRIX_SOLID_MULTISPLASH
-
-#define RGB_MATRIX_DISABLE_KEYCODES
-
-#endif

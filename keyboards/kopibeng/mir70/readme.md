@@ -16,6 +16,6 @@ See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_to
 
 ## Bootloader
 
-* Physical reset button: Press the RESET switch on top side of PCB.
+* Physical reset: Short the RESET jumper on PCB.
 * Bootmagic reset: Unplug keyboard, hold down ESC key and plug in the keyboard.
 * Keycode reset: Press the `QK_BOOT` keycode (default: MO(1) + Home keys) in layout if available.
