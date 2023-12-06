@@ -1,8 +1,8 @@
 # Bunga65
 
-![Bunga65]()
+![Bunga65](https://i.imgur.com/IpG2yKAh.png)
 
-A QMK-powered, VIA-enabled 65% PCB with support for ANSI/ISO layouts, split Backspace and various bottom row layout configurations.
+A QMK-powered, VIA-enabled 65% PCB with support for ANSI/ISO layouts, split Backspace and 6.25u/7u bottom row layout configurations.
 
 * Keyboard Maintainer: kopibeng
 * Hardware Supported: RA Studios

@@ -3,9 +3,17 @@
     "manufacturer": "RA Studios",
     "maintainer": "kopibeng",
     "url": "https://github.com/kopibeng",
+	"features": {
+		"bootmagic": true,
+		"command": true,
+		"console": true,
+		"extrakey": true,
+		"mousekey": true,
+		"nkro": true
+	},
     "usb": {
         "vid": "0x4B50",
-        "pid": "0x0653",
+        "pid": "0x0654",
         "device_version": "1.0.0"
     },
     "matrix_pins": {
@@ -98,9 +106,7 @@
                 {"label": "Ctrl", "matrix": [4, 0], "x": 0, "y": 4, "w": 1.25},
                 {"label": "GUI", "matrix": [4, 1], "x": 1.25, "y": 4, "w": 1.25},
                 {"label": "Alt", "matrix": [4, 2], "x": 2.5, "y": 4, "w": 1.25},
-                {"label": "Space", "matrix": [4, 4], "x": 3.75, "y": 4, "w": 2.25},
                 {"label": "Space", "matrix": [4, 6], "x": 6, "y": 4, "w": 1.25},
-                {"label": "Space", "matrix": [4, 8], "x": 7.25, "y": 4, "w": 2.75},
                 {"label": "Alt", "matrix": [4, 10], "x": 10, "y": 4, "w": 1.25},
                 {"label": "Fn", "matrix": [4, 11], "x": 11.25, "y": 4, "w": 1.25},
 
