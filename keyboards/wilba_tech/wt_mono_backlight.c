@@ -23,8 +23,14 @@
 #include "i2c_master.h"
 #include "host.h"
 #include "progmem.h"
-#include "eeconfig.h"
-#include "compiler_support.h"
+#include "eeprom.h"
+
+#include "via.h" // uses EEPROM address, lighting value IDs
+#define MONO_BACKLIGHT_CONFIG_EEPROM_ADDR (VIA_EEPROM_CUSTOM_CONFIG_ADDR)
+
+#if VIA_EEPROM_CUSTOM_CONFIG_SIZE == 0
+#error VIA_EEPROM_CUSTOM_CONFIG_SIZE was not defined to store backlight_config struct
+#endif
 
 #include "drivers/led/issi/is31fl3736-mono.h"
 
@@ -42,8 +48,6 @@ backlight_config g_config = {
     .effect_speed = MONO_BACKLIGHT_EFFECT_SPEED,
     .color_1 = MONO_BACKLIGHT_COLOR_1,
 };
-
-STATIC_ASSERT(sizeof(backlight_config) == EECONFIG_KB_DATA_SIZE, "Mismatch in keyboard EECONFIG stored data");
 
 bool g_suspend_state = false;
 
@@ -146,8 +150,8 @@ void backlight_effect_cycle_all(void)
 void backlight_effect_indicators(void)
 {
 #if defined(MONO_BACKLIGHT_WT75_A)
-    hsv_t hsv = { .h = g_config.color_1.h, .s = g_config.color_1.s, .v = g_config.brightness };
-    rgb_t rgb = hsv_to_rgb( hsv );
+    HSV hsv = { .h = g_config.color_1.h, .s = g_config.color_1.s, .v = g_config.brightness };
+    RGB rgb = hsv_to_rgb( hsv );
     // SW7,CS8 = (6*8+7) = 55
     // SW8,CS8 = (7*8+7) = 63
     // SW9,CS8 = (8*8+7) = 71
@@ -335,16 +339,14 @@ void backlight_config_get_value( uint8_t *data )
     }
 }
 
-void eeconfig_init_kb_datablock(void) {
-    backlight_config_save();
+void backlight_config_load(void)
+{
+    eeprom_read_block( &g_config, ((void*)MONO_BACKLIGHT_CONFIG_EEPROM_ADDR), sizeof(backlight_config) );
 }
 
-void backlight_config_load(void) {
-    eeconfig_read_kb_datablock( &g_config, 0, sizeof(backlight_config) );
-}
-
-void backlight_config_save(void) {
-    eeconfig_update_kb_datablock( &g_config, 0, sizeof(backlight_config) );
+void backlight_config_save(void)
+{
+    eeprom_update_block( &g_config, ((void*)MONO_BACKLIGHT_CONFIG_EEPROM_ADDR), sizeof(backlight_config) );
 }
 
 void backlight_update_pwm_buffers(void)

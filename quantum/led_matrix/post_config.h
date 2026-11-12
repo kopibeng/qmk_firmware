@@ -5,11 +5,6 @@
 
 // clang-format off
 
-// framebuffer
-#if defined(ENABLE_LED_MATRIX_TYPING_HEATMAP)
-#    define LED_MATRIX_FRAMEBUFFER_EFFECTS
-#endif
-
 // reactive
 #if defined(ENABLE_LED_MATRIX_SOLID_REACTIVE_SIMPLE) || \
     defined(ENABLE_LED_MATRIX_SOLID_REACTIVE_WIDE) || \

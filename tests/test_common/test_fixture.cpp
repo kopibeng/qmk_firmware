@@ -7,7 +7,6 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "keyboard_report_util.hpp"
-#include "mouse_report_util.hpp"
 #include "keycode.h"
 #include "test_driver.hpp"
 #include "test_logger.hpp"
@@ -46,7 +45,7 @@ void TestFixture::SetUpTestCase() {
 
     // The following is enough to bootstrap the values set in main
     eeconfig_init_quantum();
-    eeconfig_update_debug(&debug_config);
+    eeconfig_update_debug(debug_config.raw);
 
     TestDriver driver;
     keyboard_init();
@@ -65,14 +64,11 @@ TestFixture::TestFixture() {
 
 TestFixture::~TestFixture() {
     test_logger.info() << "test fixture clean-up start." << std::endl;
-    ::testing::NiceMock<TestDriver> driver;
+    TestDriver driver;
 
     /* Reset keyboard state. */
     clear_all_keys();
 
-#ifdef MOUSEKEY_ENABLE
-    EXPECT_EMPTY_MOUSE_REPORT(driver);
-#endif
     clear_keyboard();
 
     clear_oneshot_mods();

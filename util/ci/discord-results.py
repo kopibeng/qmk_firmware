@@ -3,6 +3,7 @@
 import argparse
 import os
 import re
+import sys
 from pathlib import Path
 from discord_webhook import DiscordWebhook, DiscordEmbed
 

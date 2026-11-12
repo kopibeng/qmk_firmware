@@ -161,23 +161,15 @@ Note that the choice of timer may conflict with the [Audio](audio) feature.
 
 Depending on the ChibiOS board configuration, you may need to enable PWM at the keyboard level. For STM32, this would look like:
 
-::: code-group
-```c [halconf.h]
-#pragma once
-
-#define HAL_USE_PWM TRUE // [!code focus]
-
-#include_next <halconf.h>
+`halconf.h`:
+```c
+#define HAL_USE_PWM TRUE
 ```
-```c [mcuconf.h]
-#pragma once
-
-#include_next <mcuconf.h>
-
-#undef STM32_PWM_USE_TIM4 // [!code focus]
-#define STM32_PWM_USE_TIM4 TRUE // [!code focus]
+`mcuconf.h`:
+```c
+#undef STM32_PWM_USE_TIM4
+#define STM32_PWM_USE_TIM4 TRUE
 ```
-:::
 
 The following `#define`s apply only to the `pwm` driver:
 
@@ -195,23 +187,15 @@ Refer to the ST datasheet for your particular MCU to determine these values. For
 
 Depending on the ChibiOS board configuration, you may need to enable general-purpose timers at the keyboard level. For STM32, this would look like:
 
-::: code-group
-```c [halconf.h]
-#pragma once
-
-#define HAL_USE_GPT TRUE // [!code focus]
-
-#include_next <halconf.h>
+`halconf.h`:
+```c
+#define HAL_USE_GPT TRUE
 ```
-```c [mcuconf.h]
-#pragma once
-
-#include_next <mcuconf.h>
-
-#undef STM32_GPT_USE_TIM15 // [!code focus]
-#define STM32_GPT_USE_TIM15 TRUE // [!code focus]
+`mcuconf.h`:
+```c
+#undef STM32_GPT_USE_TIM15
+#define STM32_GPT_USE_TIM15 TRUE
 ```
-:::
 
 The following `#define`s apply only to the `timer` driver:
 
@@ -227,7 +211,7 @@ In this typical example, the backlight LEDs are all connected in parallel toward
 A pulldown resistor is also placed between the gate pin and ground to keep it at a defined state when it is not otherwise being driven by the MCU.
 The values of these resistors are not critical - see [this Electronics StackExchange question](https://electronics.stackexchange.com/q/68748) for more information.
 
-![Backlight example circuit](/BmAvoUC.png)
+![Backlight example circuit](https://i.imgur.com/BmAvoUC.png)
 
 ## API {#api}
 

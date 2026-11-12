@@ -15,7 +15,6 @@
  */
 
 #include "test_keymap_key.hpp"
-#include <iomanip>
 #include <cstdint>
 #include <ios>
 #include "matrix.h"

@@ -5,6 +5,8 @@
 
 #include "matrix.h"
 
+extern volatile bool isLeftHand;
+
 void split_pre_init(void);
 void split_post_init(void);
 

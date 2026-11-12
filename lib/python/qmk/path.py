@@ -3,7 +3,7 @@
 import logging
 import os
 import argparse
-from pathlib import Path, PureWindowsPath, PurePosixPath
+from pathlib import Path
 
 from qmk.constants import MAX_KEYBOARD_SUBFOLDERS, QMK_FIRMWARE, QMK_USERSPACE, HAS_QMK_USERSPACE
 from qmk.errors import NoSuchKeyboardError
@@ -21,9 +21,11 @@ def is_keyboard(keyboard_name):
     if Path(keyboard_name).is_absolute():
         return False
 
-    keyboard_json = QMK_FIRMWARE / 'keyboards' / keyboard_name / 'keyboard.json'
+    keyboard_path = QMK_FIRMWARE / 'keyboards' / keyboard_name
+    rules_mk = keyboard_path / 'rules.mk'
+    keyboard_json = keyboard_path / 'keyboard.json'
 
-    return keyboard_json.exists()
+    return rules_mk.exists() or keyboard_json.exists()
 
 
 def under_qmk_firmware(path=Path(os.environ['ORIG_CWD'])):
@@ -144,34 +146,6 @@ def normpath(path):
     return Path(os.environ['ORIG_CWD']) / path
 
 
-def is_relative_to(file, other):
-    """Provide normpath behavior to Path.is_relative_to
-    """
-    return normpath(file).is_relative_to(normpath(other))
-
-
-def unix_style_path(path):
-    """Converts a Windows-style path with drive letter to a Unix path.
-
-    Path().as_posix() normally returns the path with drive letter and forward slashes, so is inappropriate for `Makefile` paths.
-
-    Passes through unadulterated if the path is not a Windows-style path.
-
-    Args:
-
-        path
-            The path to convert.
-
-    Returns:
-        The input path converted to Unix format.
-    """
-    if isinstance(path, PureWindowsPath):
-        p = list(path.parts)
-        p[0] = f'/{p[0][0].lower()}'  # convert from `X:/` to `/x`
-        path = PurePosixPath(*p)
-    return path
-
-
 class FileType(argparse.FileType):
     def __init__(self, *args, **kwargs):
         # Use UTF8 by default for stdin
@@ -183,17 +157,5 @@ class FileType(argparse.FileType):
         """normalize and check exists
             otherwise magic strings like '-' for stdin resolve to bad paths
         """
-        # TODO: This should not return both Path and TextIOWrapper as consumers
-        # assume that they can call Path.as_posix without checking type
-
-        # Handle absolute paths and relative paths to CWD
         norm = normpath(string)
-        if norm.exists():
-            return norm
-
-        # Handle relative paths to QMK_HOME
-        relative = Path(string)
-        if relative.exists():
-            return relative
-
-        return super().__call__(string)
+        return norm if norm.exists() else super().__call__(string)

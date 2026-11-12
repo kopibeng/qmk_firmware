@@ -16,4 +16,3 @@
 #include "solid_splash_anim.h"
 #include "wave_left_right_anim.h"
 #include "wave_up_down_anim.h"
-#include "typing_heatmap_anim.h"

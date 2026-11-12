@@ -20,4 +20,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "quantum.h"
 #ifdef RGB_BACKLIGHT_PORTICO
 #include "keyboards/wilba_tech/wt_rgb_backlight_keycodes.h"
+#include "via.h"
 #endif

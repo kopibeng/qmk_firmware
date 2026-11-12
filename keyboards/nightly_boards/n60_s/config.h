@@ -18,5 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 /* Audio */
-#define AUDIO_PIN B7
+
+#define B7_AUDIO
 #define AUDIO_CLICKY

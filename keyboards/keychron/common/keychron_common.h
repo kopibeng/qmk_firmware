@@ -20,6 +20,10 @@
 #include <stdbool.h>
 #include "action.h"
 
+#ifdef VIA_ENABLE
+#    include "via.h"
+#endif
+
 #include "quantum_keycodes.h"
 
 enum custom_keycodes {

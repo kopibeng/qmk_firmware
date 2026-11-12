@@ -8,7 +8,7 @@
 #undef PERMISSIVE_HOLD
 
 
-#define NKRO_DEFAULT_ON true
+#define FORCE_NKRO
 
 #ifndef TAPPING_TOGGLE
 #define TAPPING_TOGGLE  1

@@ -19,7 +19,7 @@
 #define SPLIT_USB_DETECT
 #define SPLIT_MODS_ENABLE
 
-#define AUDIO_PIN B6
+#define B6_AUDIO
 
 #ifdef AUDIO_ENABLE
   #define STARTUP_SONG SONG(STARTUP_SOUND)

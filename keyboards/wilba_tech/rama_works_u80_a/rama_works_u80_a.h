@@ -18,3 +18,4 @@
 
 #include "quantum.h"
 #include "keyboards/wilba_tech/wt_rgb_backlight_keycodes.h"
+#include "via.h"

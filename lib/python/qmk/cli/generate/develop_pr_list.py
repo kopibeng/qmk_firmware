@@ -39,12 +39,7 @@ def _try_open_cache(cli):
         return None
 
     cache_loc = Path(cli.config_file).parent
-    cache = SqliteCache(cache_loc)
-
-    if cli.args.clean:
-        cache.clear()
-
-    return cache
+    return SqliteCache(cache_loc)
 
 
 def _get_github():
@@ -53,11 +48,9 @@ def _get_github():
     except ImportError:
         return None
 
-    # ghapi v2 (July 2026) is now async by default - luckily v1 happily ignores the sync argument
-    return GhApi(sync=True)
+    return GhApi()
 
 
-@cli.argument('-c', '--clean', arg_only=True, action='store_true', help="Remove cache before list generation.")
 @cli.argument('-f', '--from-ref', default='0.11.0', help='Git revision/tag/reference/branch to begin search')
 @cli.argument('-b', '--branch', default='upstream/develop', help='Git branch to iterate (default: "upstream/develop")')
 @cli.subcommand('Creates the develop PR list.', hidden=False if cli.config.user.developer else True)

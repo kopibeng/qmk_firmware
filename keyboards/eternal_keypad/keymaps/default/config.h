@@ -16,3 +16,4 @@
 #pragma once
 
 #define ONESHOT_TIMEOUT 2000
+#define FORCE_NKRO

@@ -8,10 +8,6 @@
 #    include "print.h"
 #endif // CONSOLE_ENABLE
 
-#ifdef POINTING_DEVICE_ENABLE
-#    include "drivers/sensors/cirque_pinnacle_gestures.h"
-#endif // POINTING_DEVICE_ENABLE
-
 #if defined(POINTING_DEVICE_ENABLE) || defined(SPLEEB_ENCODER_MODE_MAP_ENABLE)
 typedef union {
     uint16_t raw;
@@ -283,6 +279,7 @@ void pointing_device_init_kb(void) {
     cirque_pinnacle_enable_cursor_glide(false);
 
     set_auto_mouse_enable(true);
+    pointing_device_init_user();
 }
 
 /**

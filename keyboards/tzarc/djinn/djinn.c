@@ -87,7 +87,7 @@ void keyboard_post_init_kb(void) {
 // RGB brightness scaling dependent on USBPD state
 
 #if defined(RGB_MATRIX_ENABLE)
-rgb_t rgb_matrix_hsv_to_rgb(hsv_t hsv) {
+RGB rgb_matrix_hsv_to_rgb(HSV hsv) {
     float scale;
 
 #    ifdef DJINN_SUPPORTS_3A_FUSE
@@ -209,9 +209,9 @@ void housekeeping_task_kb(void) {
     // Match the backlight to the LCD state
     if (is_keyboard_master() && is_backlight_enabled() != peripherals_on) {
         if (peripherals_on)
-            backlight_enable_noeeprom();
+            backlight_enable();
         else
-            backlight_disable_noeeprom();
+            backlight_disable();
     }
 
     // Draw the UI

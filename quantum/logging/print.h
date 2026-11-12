@@ -30,25 +30,7 @@
 #include "sendchar.h"
 #include "progmem.h"
 
-/**
- * @brief Configure the destination for routing all log data to.
- */
 void print_set_sendchar(sendchar_func_t func);
-
-/**
- * @def print_printf(fmt, ...)
- * @brief Low-level logging entrypoint - should not be called directly
- */
-#ifndef NO_PRINT
-#    if __has_include_next("_print.h")
-#        include_next "_print.h" // Include the platforms print.h - must export print_printf
-#    else
-#        include "printf.h" // Fall back to lib/printf/printf.h
-#        define print_printf printf
-#    endif
-#else
-#    define print_printf(fmt, ...) // Remove ALL print defines
-#endif
 
 /**
  * @brief This macro suppress format warnings for the function that is passed
@@ -66,10 +48,26 @@ void print_set_sendchar(sendchar_func_t func);
         _Pragma("GCC diagnostic pop");                             \
     } while (0)
 
-#ifdef USER_PRINT
-#    define xprintf(fmt, ...) // Remove normal print defines
+#ifndef NO_PRINT
+#    if __has_include_next("_print.h")
+#        include_next "_print.h" /* Include the platforms print.h */
+#    else
+#        include "printf.h" // // Fall back to lib/printf/printf.h
+#        define xprintf printf
+#    endif
 #else
-#    define xprintf print_printf
+// Remove print defines
+#    undef xprintf
+#    define xprintf(fmt, ...)
+#endif
+
+// Resolve before USER_PRINT can remove
+#define uprintf xprintf
+
+#ifdef USER_PRINT
+// Remove normal print defines
+#    undef xprintf
+#    define xprintf(fmt, ...)
 #endif
 
 #define print(s) xprintf(s)
@@ -109,8 +107,6 @@ void print_set_sendchar(sendchar_func_t func);
 // print (and store their wasteful strings).
 //
 // !!! DO NOT USE USER PRINT CALLS IN THE BODY OF QMK/TMK !!!
-
-#define uprintf print_printf
 
 #define uprint(s) uprintf(s)
 #define uprintln(s) uprintf(s "\r\n")

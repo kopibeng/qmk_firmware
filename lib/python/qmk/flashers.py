@@ -9,6 +9,7 @@ import usb.core
 from qmk.constants import BOOTLOADER_VIDS_PIDS
 from milc import cli
 
+# yapf: disable
 _PID_TO_MCU = {
     '2fef': 'atmega16u2',
     '2ff0': 'atmega32u2',
@@ -16,7 +17,7 @@ _PID_TO_MCU = {
     '2ff4': 'atmega32u4',
     '2ff9': 'at90usb64',
     '2ffa': 'at90usb162',
-    '2ffb': 'at90usb128',
+    '2ffb': 'at90usb128'
 }
 
 AVRDUDE_MCU = {
@@ -24,6 +25,7 @@ AVRDUDE_MCU = {
     'atmega328p': 'm328p',
     'atmega328': 'm328',
 }
+# yapf: enable
 
 
 class DelayedKeyboardInterrupt:
@@ -94,7 +96,7 @@ def _find_bootloader():
                             details = 'halfkay'
                         else:
                             details = 'qmk-hid'
-                    elif bl in {'apm32-dfu', 'at32-dfu', 'gd32v-dfu', 'kiibohd', 'stm32-dfu'}:
+                    elif bl in {'apm32-dfu', 'gd32v-dfu', 'kiibohd', 'stm32-dfu'}:
                         details = (vid, pid)
                     else:
                         details = None
@@ -134,10 +136,6 @@ def _find_serial_port(vid, pid):
     return None
 
 
-def _flash_bootloadhid(file):
-    cli.run(['bootloadHID', '-r', file], capture_output=False)
-
-
 def _flash_caterina(details, file):
     port = _find_serial_port(details[0], details[1])
     if port:
@@ -155,12 +153,11 @@ def _flash_atmel_dfu(mcu, file):
 
 
 def _flash_hid_bootloader(mcu, details, file):
-    cmd = None
     if details == 'halfkay':
-        if shutil.which('teensy_loader_cli'):
-            cmd = 'teensy_loader_cli'
-        elif shutil.which('teensy-loader-cli'):
+        if shutil.which('teensy-loader-cli'):
             cmd = 'teensy-loader-cli'
+        elif shutil.which('teensy_loader_cli'):
+            cmd = 'teensy_loader_cli'
 
     # Use 'hid_bootloader_cli' for QMK HID and as a fallback for HalfKay
     if not cmd:
@@ -179,7 +176,7 @@ def _flash_dfu_util(details, file):
     # kiibohd
     elif details[0] == '1c11' and details[1] == 'b007':
         cli.run(['dfu-util', '-a', '0', '-d', f'{details[0]}:{details[1]}', '-D', file], capture_output=False)
-    # STM32, APM32, AT32, or GD32V DFU
+    # STM32, APM32, or GD32V DFU
     else:
         cli.run(['dfu-util', '-a', '0', '-d', f'{details[0]}:{details[1]}', '-s', '0x08000000:leave', '-D', file], capture_output=False)
 
@@ -205,10 +202,6 @@ def _flash_mdloader(file):
 
 
 def _flash_uf2(file):
-    output = cli.run(['util/uf2conv.py', '--info', file]).stdout
-    if 'UF2 File' not in output:
-        return True
-
     cli.run(['util/uf2conv.py', '--deploy', file], capture_output=False)
 
 
@@ -220,8 +213,6 @@ def flasher(mcu, file):
     time.sleep(1)
     if bl == 'atmel-dfu':
         _flash_atmel_dfu(details, file)
-    elif bl == 'bootloadhid':
-        _flash_bootloadhid(file)
     elif bl == 'caterina':
         if _flash_caterina(details, file):
             return (True, "The Caterina bootloader was found but is not writable. Check 'qmk doctor' output for advice.")
@@ -231,7 +222,7 @@ def flasher(mcu, file):
                 return (True, "Please make sure 'teensy_loader_cli' or 'hid_bootloader_cli' is available on your system.")
         else:
             return (True, "Specifying the MCU with '-m' is necessary for HalfKay/HID bootloaders!")
-    elif bl in {'apm32-dfu', 'at32-dfu', 'gd32v-dfu', 'kiibohd', 'stm32-dfu'}:
+    elif bl in {'apm32-dfu', 'gd32v-dfu', 'kiibohd', 'stm32-dfu'}:
         _flash_dfu_util(details, file)
     elif bl == 'wb32-dfu':
         if _flash_wb32_dfu_updater(file):
@@ -244,8 +235,7 @@ def flasher(mcu, file):
     elif bl == 'md-boot':
         _flash_mdloader(file)
     elif bl == '_uf2_compatible_':
-        if _flash_uf2(file):
-            return (True, "Flashing only supports uf2 format files.")
+        _flash_uf2(file)
     else:
         return (True, "Known bootloader found but flashing not currently supported!")
 

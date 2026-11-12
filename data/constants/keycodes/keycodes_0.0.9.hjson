@@ -1,8 +1,0 @@
-{
-    "ranges": {
-        "0x74C0/0x003F": "!delete!", // Old QK_STENO
-        "0x74C0/0x005F": {
-            "define": "QK_STENO"
-        }
-    }
-}
